@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+mario-team-builder/node_modules
+/.pnp
+.pnp.js
+
+# testing
+mario-team-builder/coverage
+
+# production
+mario-team-builder/build
+
+# misc
+/mario-team-builder.DS_Store
+mario-team-builder/.env.local
+mario-team-builder/.env.development.local
+mario-team-builder/.env.test.local
+mario-team-builder/.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
