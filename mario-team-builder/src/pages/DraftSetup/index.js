@@ -8,9 +8,9 @@ const DraftSetup = ({ setCompleteSetup, setDraftTeams }) => {
     teams: {}
   });
   const handleNumberOfTeamsChange = (value) => {
-    const teamSet = {};
+    const teamSet = { ...formData.teams };
     for (let i = 0; i < value; i++) {
-      teamSet[i] = new Team({ id: i + 1 });
+      if (!teamSet[i + 1]) teamSet[i + 1] = new Team({ id: i + 1 });
     }
     setFormData({
       ...formData,
@@ -19,14 +19,19 @@ const DraftSetup = ({ setCompleteSetup, setDraftTeams }) => {
     });
   };
   const preSubmitValidation = () => {
-    let valid = true;
-    valid = formData.teams.some((t) => !!t.name);
-    return valid;
+    return !Object.values(formData.teams).some((t) => !t.name);
   };
   const submit = () => {
     const canAdvance = preSubmitValidation();
     if (canAdvance) {
-      setDraftTeams([...formData.teams]);
+      const teams = [
+        ...Object.values(formData.teams)
+          .map((team, index) => {
+            if (index < formData.numberOfTeams && team.name) return team;
+          })
+          .filter(Boolean)
+      ];
+      setDraftTeams([...teams]);
       setCompleteSetup(true);
     }
   };
@@ -47,21 +52,28 @@ const DraftSetup = ({ setCompleteSetup, setDraftTeams }) => {
             <MenuItem value={6}>6</MenuItem>
           </Select>
         </FormControl>
-        {[...formData.teams].map((t, i) => (
-          <div key={`team-${t.id}`}>
-            {/* <InputLabel>How many teams?</InputLabel> */}
-            <TextField
-              label={`Team name:`}
-              onChange={(event) => {
-                formData.teams.set(
-                  i + 1,
-                  new Team({ ...formData.teams.get(i + 1), name: event.target.value })
-                );
-              }}
-              value={formData.teams.get[i + 1].name}
-            />
-          </div>
-        ))}
+        {Object.entries(formData.teams).map(([key, val], i) => {
+          if (i < formData.numberOfTeams) {
+            return (
+              <div key={`team-${val.id}-${key}`}>
+                {/* <InputLabel>How many teams?</InputLabel> */}
+                <TextField
+                  label={`Team name:`}
+                  onChange={(event) => {
+                    setFormData({
+                      ...formData,
+                      teams: {
+                        ...formData.teams,
+                        [i + 1]: { ...formData.teams[i + 1], name: event.target.value }
+                      }
+                    });
+                  }}
+                  value={formData.teams[i + 1]?.name ?? ''}
+                />
+              </div>
+            );
+          }
+        })}
       </form>
       <br />
       <button

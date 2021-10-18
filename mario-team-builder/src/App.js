@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
@@ -60,7 +60,7 @@ export default function App() {
   const [draftClass, setDraftClass] = useState(playerPool);
   const [draftTeams, setDraftTeams] = useState([]);
   const [round, setRound] = useState(1);
-  const [currentTeam, setCurrentTeam] = useState(draftTeams[0]);
+  const [currentTeam, setCurrentTeam] = useState(null);
   const [selected, setSelected] = useState([]);
 
   function draftPlayer() {
@@ -83,12 +83,18 @@ export default function App() {
     }
   }
 
+  useEffect(() => {
+    if (hasCompletedSetup && draftTeams.length > 0) {
+      setCurrentTeam(draftTeams[0]);
+    }
+  }, [draftTeams, hasCompletedSetup]);
+
   return (
     <div>
       {!hasCompletedSetup && (
         <DraftSetup setDraftTeams={setDraftTeams} setCompleteSetup={setCompleteSetup} />
       )}
-      {hasCompletedSetup && (
+      {hasCompletedSetup && draftTeams.length > 0 && currentTeam && (
         <>
           <Grid container spacing={3}>
             <Grid container item xs={12} md={4}>

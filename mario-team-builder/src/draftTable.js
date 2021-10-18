@@ -1,3 +1,4 @@
+//eslint-disable-next-line no-unused-vars
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -19,7 +20,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import AddBoxIcon from '@material-ui/icons/AddBox';
- 
+import { Avatar } from '@material-ui/core';
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -47,6 +49,7 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+  { id: 'image', numeric: false, disablePadding: false, label: 'Image' },
   {
     id: 'name',
     numeric: false,
@@ -149,7 +152,6 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = ({ numSelected, selectedPlayer, handleDraftPlayer }) => {
   const classes = useToolbarStyles();
-
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -232,7 +234,7 @@ export default function EnhancedTable({ rows, selected, handleSetSelected, handl
     handleSetSelected([]);
   };
 
-  const handleClick = (event, name) => {
+  const handleClick = (name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -302,7 +304,7 @@ export default function EnhancedTable({ rows, selected, handleSetSelected, handl
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={() => handleClick(row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -312,6 +314,45 @@ export default function EnhancedTable({ rows, selected, handleSetSelected, handl
                         <Checkbox
                           checked={isItemSelected}
                           inputProps={{ 'aria-labelledby': labelId }}
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <Avatar
+                          sx={{ width: 25, height: 25 }}
+                          alt={row.name}
+                          src={
+                            [
+                              'Mario',
+                              'Luigi',
+                              'Waluigi',
+                              'Wario',
+                              'Donkey Kong',
+                              'Diddy Kong',
+                              'Peach',
+                              'Daisy',
+                              'Yoshi',
+                              'Birdo',
+                              'Bowser',
+                              'Bowser Jr.',
+                              'Wiggler',
+                              'Red Koopa Paratroopa',
+                              'Light Blue Yoshi',
+                              'Green Koopa Paratroopa',
+                              'Green Dry Bones',
+                              'Blue Dry Bones',
+                              'Blue Shy Guy',
+                              'Yellow Shy Guy',
+                              'Green Shy Guy',
+                              'Gray Shy Guy',
+                              'King K. Rool',
+                              'Red Koopa Paratroopa'
+                            ].includes(row.name)
+                              ? `/images/${row.name
+                                  .toLowerCase()
+                                  .replace(' ', '-')
+                                  .replace('.', '')}.jpg`
+                              : `/images/${row.name.toLowerCase().replace(' ', '-')}.png`
+                          }
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
