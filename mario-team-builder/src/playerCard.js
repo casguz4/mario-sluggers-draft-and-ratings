@@ -19,6 +19,7 @@ import {
   faRunning,
   faStar
 } from '@fortawesome/free-solid-svg-icons';
+import { getImageLocationByName } from './util';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,8 +54,15 @@ const PlayerCard = ({ player }) => {
   const handleCardClick = () => setShowContent(!showContent);
 
   useEffect(() => {
-    setImage('https://placedog.net/150/150/?random');
+    setImage(getImageLocationByName(player.name));
     console.log('player', player);
+    console.log(
+      `%c image location ${getImageLocationByName(player.name)}`,
+      'background: royalblue; color: #fff;'
+    );
+    return () => {
+      setImage('');
+    };
   }, []);
 
   return (

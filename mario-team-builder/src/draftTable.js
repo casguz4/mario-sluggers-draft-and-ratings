@@ -21,6 +21,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import { Avatar } from '@material-ui/core';
+import { getImageLocationByName } from './util';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -320,39 +321,7 @@ export default function EnhancedTable({ rows, selected, handleSetSelected, handl
                         <Avatar
                           sx={{ width: 25, height: 25 }}
                           alt={row.name}
-                          src={
-                            [
-                              'Mario',
-                              'Luigi',
-                              'Waluigi',
-                              'Wario',
-                              'Donkey Kong',
-                              'Diddy Kong',
-                              'Peach',
-                              'Daisy',
-                              'Yoshi',
-                              'Birdo',
-                              'Bowser',
-                              'Bowser Jr.',
-                              'Wiggler',
-                              'Red Koopa Paratroopa',
-                              'Light Blue Yoshi',
-                              'Green Koopa Paratroopa',
-                              'Green Dry Bones',
-                              'Blue Dry Bones',
-                              'Blue Shy Guy',
-                              'Yellow Shy Guy',
-                              'Green Shy Guy',
-                              'Gray Shy Guy',
-                              'King K. Rool',
-                              'Red Koopa Paratroopa'
-                            ].includes(row.name)
-                              ? `/images/${row.name
-                                  .toLowerCase()
-                                  .replace(' ', '-')
-                                  .replace('.', '')}.jpg`
-                              : `/images/${row.name.toLowerCase().replace(' ', '-')}.png`
-                          }
+                          src={getImageLocationByName(row.name)}
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
